@@ -40,4 +40,64 @@ router.post('/addlink', fetchuser, [
 
 })
 
+// ROUTE 3: Update an existing Link using: PUT "/api/links/updatelink/:id".Login required
+router.put('/updatelink/:id', fetchuser, [
+    body('description', 'Description cannot be blank').exists(),
+    body('link', 'Link cannot be blank').trim().exists(),
+    body('linkType', 'Link Type cannot be blank').exists(),
+], async (req, res) => {
+
+    try {
+        const { description, link, linkType, removeDate } = req.body;
+
+        // Create a newNote object
+        const newNote = {};
+        if (description) { newNote.description = description };
+        if (link) { newNote.link = link };
+        if (linkType) { newNote.linkType = linkType };
+        if (removeDate) { newNote.removeDate = removeDate };
+
+        // Find the Link to be updated and update it
+        let linkData = await Links.findById(req.params.id);
+        if (!linkData) { return res.status(404).send("Not Found") }
+
+        if (linkData.user.toString() !== req.user.id) {
+            return res.status(401).send("Not Allowed");
+        }
+
+        linkData = await Links.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true })
+        res.json({ linkData })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error")
+    }
+
+
+})
+
+// ROUTE 3: Delete Link using: DELETE "/api/links/deletelink/:id".Login required
+router.delete('/deletelink/:id', fetchuser, async (req, res) => {
+
+    try {
+        const { description, link, linkType, removeDate } = req.body;
+
+        // Find the Link to be updated and update it
+        let linkData = await Links.findById(req.params.id);
+        if (!linkData) { return res.status(404).send("Not Found") }
+
+        // Allow deletion only if user owns this link
+        if (linkData.user.toString() !== req.user.id) {
+            return res.status(401).send("Not Allowed");
+        }
+
+        linkData = await Links.findByIdAndDelete(req.params.id)
+        res.json({ "Success": "Note hab been deleted", linkData: linkData })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error")
+    }
+
+
+})
+
 module.exports = router
