@@ -2,28 +2,39 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import linkContext from '../context/links/linkContext';
 import Linkitem from './Linkitem';
 import Addlink from './Addlink';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+
 
 const Links = () => {
     const context = useContext(linkContext);
-    const { links, getLinks, addLink } = context;
+    const { links, getLinks, editLink } = context;
     useEffect(() => {
         getLinks()
+        // eslint-disable-next-line
     }, [])
+    const ref = useRef(null)
+    const refClose = useRef(null)
+    const [link, setLink] = useState({ id: "", edescription: "", elink: "", elinkType: "" });
+
     const updateLink = (currentLink) => {
         ref.current.click()
-        setLink(currentLink);
+        setLink({ id: currentLink._id, edescription: currentLink.description, elink: currentLink.link, elinkType: currentLink.linkType });
     }
-    const ref = useRef(null)
-    const [link, setLink] = useState({ description: "", link: "", linkType: "" });
+
     const handleClick = (e) => {
-        console.log("updateing the link")
-        e.preventDefault();
+        editLink(link.id, link.edescription, link.elink, link.elinkType);
+        refClose.current.click()
         // addLink(link);
     }
 
     const onChange = (e) => {
-        setLink({ ...links, [e.target.name]: e.target.value })
+        setLink({ ...link, [e.target.name]: e.target.value })
     }
+
+    const onDragEnd = (result) => {
+        // TODO: reorder our column
+    }
+
     return (
         <div>
             <Addlink />
@@ -44,13 +55,13 @@ const Links = () => {
                         <div className="modal-body">
                             <form>
                                 <div className="mb-3">
-                                    <input type="text" className="form-control" id="edescription" name='edescription' value={link.description} aria-describedby="emailHelp" onChange={onChange} placeholder='Enter Description' />
+                                    <input type="text" className="form-control" id="edescription" name='edescription' value={link.edescription} aria-describedby="emailHelp" onChange={onChange} placeholder='Enter Description' />
                                 </div>
                                 <div className="mb-3">
-                                    <input type="text" className="form-control" id="elink" name='elink' value={link.link} onChange={onChange} placeholder='Enter Link' />
+                                    <input type="text" className="form-control" id="elink" name='elink' value={link.elink} onChange={onChange} placeholder='Enter Link' />
                                 </div>
                                 <div className="mb-3">
-                                    <select className="form-select" id='elinkType' name='elinkType' value={link.linkType} aria-label="Default select example" onChange={onChange} placeholder='Select'>
+                                    <select className="form-select" id='elinkType' name='elinkType' value={link.elinkType} aria-label="Default select example" onChange={onChange} placeholder='Select'>
                                         {/* <option value="Normal Link" selected disabled>Select Link Type</option> */}
                                         <option value="Normal Link">Normal Link</option>
                                         <option value="Normal Image Link">Normal Image Link</option>
@@ -62,19 +73,45 @@ const Links = () => {
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary" onClick={handleClick}>Update Link</button>
+                            <button ref={refClose} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button
+                                disabled={link.edescription.length === 0 || link.elink.length === 0 || link.elinkType.length === 0}
+                                type="button" className="btn btn-primary" onClick={handleClick}>Update Link</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="d-flex justify-content-center">
-                <h2>List of Links</h2>
-            </div>
 
-            {links.map((link) => {
-                return <Linkitem key={link._id} updateLink={updateLink} link={link} />
-            })}
+            <DragDropContext onDragEnd={onDragEnd}>
+                <div className="d-flex justify-content-center">
+                    <h2>List of Links</h2>
+                </div>
+
+                <Droppable droppableId="links">
+                    {(provided) => (
+                        <div className='links'
+                            {...provided.droppableProps} ref={provided.innerRef}
+                        >
+                            {links.toReversed().map((link, index) => {
+                                console.log(link)
+                                return (
+                                    <Draggable key={link._id} draggableId={link._id} index={index}>
+                                        {(provided) => (
+                                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                                <Linkitem key={link._id} updateLink={updateLink} link={link} index={index} />
+                                                {provided.placeholder}
+                                            </div>
+                                        )}                   
+                                    </Draggable>
+                                )
+
+                            })}
+                            {provided.placeholder}
+                        </div>
+                    )}
+                </Droppable>
+
+            </DragDropContext>
         </div>
     )
 }

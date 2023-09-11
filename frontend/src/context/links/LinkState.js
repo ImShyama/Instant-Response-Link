@@ -17,7 +17,6 @@ const LinkState = (props) => {
             }
         });
         const json = await response.json()
-        console.log(json)
         setLinks(json)
     }
 
@@ -33,20 +32,21 @@ const LinkState = (props) => {
             },
             body: JSON.stringify({ description, link, linkType })
         });
-        const json = response.json();
-        console.log(json)
-
-        const linkData1 = {
-            // "_id": "64f065e7553564d90354fcea",
-            "user": "64ec4ca659b8dce648e58c93",
-            "description": description,
-            "link": link,
-            "linkType": linkType,
-            "date": "2023-08-31T10:05:27.581Z",
-            "__v": 0
-        }
-        console.log(linkData1)
+        const linkData1 = await response.json();
         setLinks(links.concat(linkData1))
+        // console.log(json)
+
+        // const linkData1 = {
+        //     // "_id": "64f065e7553564d90354fcea",
+        //     "user": "64ec4ca659b8dce648e58c93",
+        //     "description": description,
+        //     "link": link,
+        //     "linkType": linkType,
+        //     "date": "2023-08-31T10:05:27.581Z",
+        //     "__v": 0
+        // }
+        // console.log(linkData1)
+        
     }
 
     // Delete a Link
@@ -59,7 +59,7 @@ const LinkState = (props) => {
                 'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRlYzRjYTY1OWI4ZGNlNjQ4ZTU4YzkzIn0sImlhdCI6MTY5MzIyMTUwNn0.Hbwcvg5kwnHMhgHDCpDkUI3rXcmk_nlvf2heKRbhfRM'
             },
         });
-        const json = response.json();
+        const json = await response.json();
         console.log(json)
         console.log("Deleting a link", id);
         const newLink = links.filter((link) => link._id !== id)
@@ -70,25 +70,28 @@ const LinkState = (props) => {
     const editLink = async (id, description, link, linkType) => {
         // API Call
         const response = await fetch(`${host}/api/links/updatelink/${id}`, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRlYzRjYTY1OWI4ZGNlNjQ4ZTU4YzkzIn0sImlhdCI6MTY5MzIyMTUwNn0.Hbwcvg5kwnHMhgHDCpDkUI3rXcmk_nlvf2heKRbhfRM'
             },
-            body: JSON.stringify()
+            body: JSON.stringify({description, link, linkType})
         });
-        const json = response.json();
+        const json = await response.json();
+        console.log(json);
 
+        let newLinks = JSON.parse(JSON.stringify(links))
         // Logic to edit in client
-        for (let index = 0; index < links.length; index++) {
-            const element = links[index];
+        for (let index = 0; index < newLinks.length; index++) {
+            const element = newLinks[index];
             if (element._id === id) {
-                element.description = description;
-                element.link = link;
-                element.linkType = linkType;
-
+                newLinks[index].description = description;
+                newLinks[index].link = link;
+                newLinks[index].linkType = linkType;
+                break;
             }
         }
+        setLinks(newLinks);
     }
 
     return (

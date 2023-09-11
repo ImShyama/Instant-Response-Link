@@ -10,6 +10,8 @@ const Addlink = () => {
     const handleClick = (e) => {
         e.preventDefault();
         addLink(links);
+        setLink({description: "", link: "", linkType: ""})
+        setAdd(false);
     }
 
     const onChange = (e) => {
@@ -38,7 +40,7 @@ const Addlink = () => {
                     <div className="mb-3">
                         {/* <label htmlFor="linktype" className="form-label">Link Type</label> */}
                         <select className="form-select" id='linkType' name='linkType' aria-label="Default select example" onChange={onChange} placeholder='Select'>
-                            <option value="DEFAULT" disabled>Select Link Type</option>
+                            <option value="DEFAULT" disabled selected>Select Link Type</option>
                             <option value="Normal Link">Normal Link</option>
                             <option value="Normal Image Link">Normal Image Link</option>
                             <option value="Drive Image Link">Drive Image Link</option>
@@ -47,7 +49,7 @@ const Addlink = () => {
                         </select>
                     </div>
 
-                    <button type="submit" className="btn btn-primary" onClick={handleClick}>Submit</button>
+                    <button disabled={links.description.length === 0 || links.link.length === 0 || links.linkType.length === 0} type="submit" className="btn btn-primary" onClick={handleClick}>Submit</button>
                 </form>
                     : ""
 
