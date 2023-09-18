@@ -8,6 +8,9 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 const Links = () => {
     const context = useContext(linkContext);
     const { links, getLinks, editLink } = context;
+    let finalLinkData = links.toReversed(); 
+    console.log(finalLinkData);
+    const [linkData, updateLinkData] = useState(links.toReversed());
     useEffect(() => {
         getLinks()
         // eslint-disable-next-line
@@ -31,8 +34,18 @@ const Links = () => {
         setLink({ ...link, [e.target.name]: e.target.value })
     }
 
-    const onDragEnd = (result) => {
+    const handleOnDragEnd = (result) => {
         // TODO: reorder our column
+        console.log(result);
+        console.log(linkData);
+        // if (!result.destination) return;
+
+        const items = Array.from(linkData);
+        console.log(items);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+        console.log(items);
+        updateLinkData(items);
     }
 
     return (
@@ -82,7 +95,7 @@ const Links = () => {
                 </div>
             </div>
 
-            <DragDropContext onDragEnd={onDragEnd}>
+            <DragDropContext onDragEnd={handleOnDragEnd}>
                 <div className="d-flex justify-content-center">
                     <h2>List of Links</h2>
                 </div>
@@ -92,8 +105,8 @@ const Links = () => {
                         <div className='links'
                             {...provided.droppableProps} ref={provided.innerRef}
                         >
-                            {links.toReversed().map((link, index) => {
-                                console.log(link)
+                            {finalLinkData.map((link, index) => {
+                                // console.log(link)
                                 return (
                                     <Draggable key={link._id} draggableId={link._id} index={index}>
                                         {(provided) => (
@@ -110,7 +123,6 @@ const Links = () => {
                         </div>
                     )}
                 </Droppable>
-
             </DragDropContext>
         </div>
     )

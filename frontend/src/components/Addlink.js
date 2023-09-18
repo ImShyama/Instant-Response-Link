@@ -22,7 +22,7 @@ const Addlink = () => {
     }
 
     return (
-        <div className='my-3'>
+        <div >
             <div className="d-flex justify-content-center my-3" style={{ backgroundColor: '#0D6EFD', color: '#fff', borderRadius: "20px", cursor: "pointer" }} onClick={handleAdd}>
                 <span className='my-2'>{add ? <i className="fa-solid fa-minus"></i> : <i className="fa-regular fa-plus" ></i>} Add Link</span>
             </div>

@@ -18,9 +18,9 @@ function Navbar() {
               <li className="nav-item">
                 <Link className={`nav-link ${location.pathname === "/" ? "active" : ""}`} aria-current="page" to="/">Links</Link>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link className={`nav-link ${location.pathname === "/settings" ? "active" : ""}`} to="/settings">Settings</Link>
-              </li>
+              </li> */}
             </ul>
             <form className="d-flex">
               <button type="button" className="btn btn-primary mx-2">Logout</button>

@@ -3,15 +3,19 @@ import linkContext from '../context/links/linkContext';
 import { Draggable } from 'react-beautiful-dnd';
 
 const Linkitem = (props) => {
-    console.log(props)
+    // console.log(props)
     const context = useContext(linkContext);
     const { deleteLink } = context;
     const { index,link,updateLink } = props;
-    console.log(link)
+    // console.log(link)
 
     return (
         <div className="card my-3" style={{ borderRadius: '25px' }}>
             <div className="card-body">
+
+                <span className='d-flex justify-content-center'>
+                <img style={{ width: '25px', height: '25px', transform: 'rotate(90deg)' }} src='./draggable-dots.ico' />
+                </span>
                 <div className='d-flex justify-content-between'>
                     <div style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: '80%' }}>
                         <h5 className="card-title">{link.description}</h5>
@@ -24,7 +28,7 @@ const Linkitem = (props) => {
                 <div className='d-flex justify-content-between'>
                     <div></div>
                     <div>
-                        <i class="fa-regular fa-image mx-2"></i>
+                        <i className="fa-regular fa-image mx-2"></i>
                         <i className="fa-solid fa-pen-to-square mx-2" onClick={() => { updateLink(link) }}></i>
                         <i className="fa-solid fa-trash-can mx-2" onClick={() => { deleteLink(link._id) }}></i>
                     </div>
