@@ -10,11 +10,16 @@ const Links = () => {
     const { links, getLinks, editLink } = context;
     let finalLinkData = links.toReversed(); 
     console.log(finalLinkData);
-    const [linkData, updateLinkData] = useState(links.toReversed());
+
+    const [linkData, updateLinkData] = useState(finalLinkData);
+
     useEffect(() => {
         getLinks()
+        links?.length>0 && updateLinkData(links)
+        console.log("linkdata1",links)
         // eslint-disable-next-line
     }, [])
+
     const ref = useRef(null)
     const refClose = useRef(null)
     const [link, setLink] = useState({ id: "", edescription: "", elink: "", elinkType: "" });
@@ -37,7 +42,7 @@ const Links = () => {
     const handleOnDragEnd = (result) => {
         // TODO: reorder our column
         console.log(result);
-        console.log(linkData);
+        console.log("linkdata",linkData);
         // if (!result.destination) return;
 
         const items = Array.from(linkData);

@@ -94,6 +94,10 @@ const LinkState = (props) => {
         setLinks(newLinks);
     }
 
+    const uploadSettings = () =>{
+        
+    }
+
     return (
         <linkContext.Provider value={{ links,getLinks, addLink, deleteLink, editLink }}>
             {props.children}
