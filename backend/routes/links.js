@@ -94,10 +94,8 @@ router.delete('/deletelink/:id', fetchuser, async (req, res) => {
         res.json({ "Success": "Note hab been deleted", linkData: linkData })
     } catch (error) {
         console.log(error);
-        res.status(500).send("Internal Server Error")
+        res.status(500).send("Internal Server Error");
     }
-
-
 })
 
 module.exports = router

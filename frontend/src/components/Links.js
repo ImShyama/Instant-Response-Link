@@ -3,20 +3,24 @@ import linkContext from '../context/links/linkContext';
 import Linkitem from './Linkitem';
 import Addlink from './Addlink';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { useNavigate } from 'react-router-dom';
 
-
-const Links = () => {
+const Links = (props) => {
     const context = useContext(linkContext);
     const { links, getLinks, editLink } = context;
-    let finalLinkData = links.toReversed(); 
-    console.log(finalLinkData);
+    let finalLinkData = links.toReversed();
+    const navigate = useNavigate();
 
     const [linkData, updateLinkData] = useState(finalLinkData);
 
     useEffect(() => {
-        getLinks()
-        links?.length>0 && updateLinkData(links)
-        console.log("linkdata1",links)
+        if (localStorage.getItem('token')) {
+            getLinks()
+            links?.length > 0 && updateLinkData(links)
+            console.log("linkdata1", links)
+        }else{
+            navigate('/login')
+        }
         // eslint-disable-next-line
     }, [])
 
@@ -27,11 +31,13 @@ const Links = () => {
     const updateLink = (currentLink) => {
         ref.current.click()
         setLink({ id: currentLink._id, edescription: currentLink.description, elink: currentLink.link, elinkType: currentLink.linkType });
+
     }
 
     const handleClick = (e) => {
         editLink(link.id, link.edescription, link.elink, link.elinkType);
         refClose.current.click()
+        props.showAlert("Updated Successfully", "success");
         // addLink(link);
     }
 
@@ -42,7 +48,7 @@ const Links = () => {
     const handleOnDragEnd = (result) => {
         // TODO: reorder our column
         console.log(result);
-        console.log("linkdata",linkData);
+        console.log("linkdata", linkData);
         // if (!result.destination) return;
 
         const items = Array.from(linkData);
@@ -55,7 +61,7 @@ const Links = () => {
 
     return (
         <div>
-            <Addlink />
+            <Addlink showAlert={props.showAlert} />
 
             {/* Button trigger modal  */}
             <button type="button" ref={ref} className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -116,10 +122,10 @@ const Links = () => {
                                     <Draggable key={link._id} draggableId={link._id} index={index}>
                                         {(provided) => (
                                             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                <Linkitem key={link._id} updateLink={updateLink} link={link} index={index} />
+                                                <Linkitem key={link._id} updateLink={updateLink} link={link} index={index} showAlert={props.showAlert} />
                                                 {provided.placeholder}
                                             </div>
-                                        )}                   
+                                        )}
                                     </Draggable>
                                 )
 

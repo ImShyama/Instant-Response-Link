@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import linkContext from '../context/links/linkContext'
 
-const Addlink = () => {
+const Addlink = (props) => {
     const context = useContext(linkContext);
     const { addLink } = context;
     const [links, setLink] = useState({ description: "", link: "", linkType: "" });
@@ -12,6 +12,7 @@ const Addlink = () => {
         addLink(links);
         setLink({description: "", link: "", linkType: ""})
         setAdd(false);
+        props.showAlert("Added Successfully", "success");
     }
 
     const onChange = (e) => {

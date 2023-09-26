@@ -30,7 +30,7 @@ const Linkitem = (props) => {
                     <div>
                         <i className="fa-regular fa-image mx-2"></i>
                         <i className="fa-solid fa-pen-to-square mx-2" onClick={() => { updateLink(link) }}></i>
-                        <i className="fa-solid fa-trash-can mx-2" onClick={() => { deleteLink(link._id) }}></i>
+                        <i className="fa-solid fa-trash-can mx-2" onClick={() => { deleteLink(link._id); props.showAlert("Deleted Sucessfully","success") }}></i>
                     </div>
                 </div>
             </div>
