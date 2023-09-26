@@ -32,6 +32,7 @@ const Signup = (props) => {
   return (
     <div className='form-container' style={{display:'flex',justifyContent:'center',alignItems:'center',minHeight:'80vh'}}>
             <form onSubmit={handleSubmit} style={{  padding:'50px', background:'#fff', borderRadius:'10px'}}>
+            <div className='d-flex justify-content-center mb-3'><h5>Signup</h5></div>
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">Full Name</label>
                     <input type="text" className="form-control" value={credentials.name} onChange={onChange} id="name" name='name' aria-describedby="emailHelp" />

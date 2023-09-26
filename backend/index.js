@@ -10,6 +10,7 @@ app.use(express.json())
 
 // Available routes
 app.use('/api/auth', require('./routes/auth'))
+app.use('/api/admin', require('./routes/admins'))
 app.use('/api/links', require('./routes/links'))
 app.use('/api/settings', require('./routes/settings'))
 

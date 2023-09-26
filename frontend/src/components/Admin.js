@@ -1,13 +1,13 @@
 import {React, useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const Login = (props) => {
+const Admin = (props) => {
     const [credentials, setCredentials] = useState({email:"", password:""})
     const navigate = useNavigate();
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        const response = await fetch(`http://localhost:5000/api/auth/login`, {
+        const response = await fetch(`http://localhost:5000/api/admin/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -18,7 +18,7 @@ const Login = (props) => {
         console.log(json);
         if(json.success){
             localStorage.setItem('token', json.authtoken);
-            navigate('/');
+            navigate('/users');
             props.showAlert("Logged in Successfully", "success");
         }else{
             props.showAlert("Invalid Details", "danger");
@@ -32,7 +32,7 @@ const Login = (props) => {
     return (
         <div className='form-container' style={{display:'flex',justifyContent:'center',alignItems:'center',minHeight:'80vh'}}>
             <form onSubmit={handleSubmit} style={{ padding:'50px', background:'#fff', borderRadius:'10px'}}>
-            <div className='d-flex justify-content-center mb-3'><h5>Login</h5></div>
+                <div className='d-flex justify-content-center mb-3'><h5>Admin Login</h5></div>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email address</label>
                     <input type="email" className="form-control" value={credentials.email} onChange={onChange} id="exampleInputEmail1" name='email' aria-describedby="emailHelp" />
@@ -48,4 +48,4 @@ const Login = (props) => {
     )
 }
 
-export default Login
+export default Admin
