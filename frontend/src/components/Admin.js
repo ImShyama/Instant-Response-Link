@@ -17,7 +17,7 @@ const Admin = (props) => {
         const json = await response.json()
         console.log(json);
         if(json.success){
-            localStorage.setItem('token', json.authtoken);
+            localStorage.setItem('adminToken', json.authtoken);
             navigate('/users');
             props.showAlert("Logged in Successfully", "success");
         }else{

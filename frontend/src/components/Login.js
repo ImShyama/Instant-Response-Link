@@ -20,7 +20,11 @@ const Login = (props) => {
             localStorage.setItem('token', json.authtoken);
             navigate('/');
             props.showAlert("Logged in Successfully", "success");
-        }else{
+        }else if(json.error = "You don't have a right to login, Please contact to our team"){
+            props.showAlert(json.error, "danger");
+        }
+        
+        else{
             props.showAlert("Invalid Details", "danger");
         }
     }

@@ -74,6 +74,10 @@ router.post('/login', [
             return res.status(400).json({success, error: "Please try to login with corrent credentials" })
         }
 
+        if(!user.approved){
+            return res.status(400).json({success, error: "You don't have a right to login, Please contact to our team" })
+        }
+
         const data = {
             user: {
                 id: user.id
@@ -101,3 +105,42 @@ router.post('/getuser', fetchuser, async (req, res) => {
     }
 })
 module.exports = router
+
+
+// ROUTE 3: Get All User Details using: POST "/api/auth/getalluser".Login not required
+router.get('/getalluser', async (req, res) => {
+        try {
+            const user = await User.find()
+            res.json({ success: true, clients: user.reverse() })
+        } catch (error) {
+            console.log(error);
+            res.status(500).send("Internal Server Error")
+        }
+})
+module.exports = router
+
+
+// ROUTE 3: Update Approved fields using: PUT "/api/auth/approve".Login not required
+router.put('/approve', async (req, res) => {
+    try {
+        const { _id } = req.body
+        console.log(_id);
+        let client = await User.findById(_id)
+        console.log(client);
+        if(client.approved){
+            client.approved = false
+            await client.save()
+        }else{
+            client.approved = true
+            await client.save()
+        }        
+        
+
+        const clients = await User.find({})
+        res.json({ success: true, clients: clients.reverse() });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+})
+module.exports = router
+

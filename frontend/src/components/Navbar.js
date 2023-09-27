@@ -7,6 +7,7 @@ function Navbar() {
   const navigate = useNavigate();
   const handleLogout = () =>{
     localStorage.removeItem('token');
+    localStorage.removeItem('adminToken');
     navigate('/login');
   }
   let location = useLocation();
@@ -27,7 +28,7 @@ function Navbar() {
                 <Link className={`nav-link ${location.pathname === "/settings" ? "active" : ""}`} to="/settings">Settings</Link>
               </li> */}
             </ul>
-            {!localStorage.getItem('token') ? <form className="d-flex">
+            {(!localStorage.getItem('token') && !localStorage.getItem('adminToken')) ? <form className="d-flex">
             <Link className="btn btn-primary mx-2" to="/login"  role="button">Login</Link>
             <Link className="btn btn-primary mx-2" to="/signup" role="button">Signup</Link>
             </form>: <button onClick={handleLogout} className='btn btn-primary'>Logout</button>}
