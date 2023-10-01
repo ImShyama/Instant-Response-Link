@@ -98,4 +98,41 @@ router.delete('/deletelink/:id', fetchuser, async (req, res) => {
     }
 })
 
+// ROUTE 4: Update animation: PUT "/api/links/animation".Login required
+router.put('/animation', fetchuser, async (req, res) => {
+    try {
+        const { _id, animation} = req.body
+        console.log(req.body);
+        let link = await Links.findById(_id)
+        if(animation != ""){
+            link.animation = animation
+            await link.save()
+        }else{
+            link.animation = "none"
+            await link.save()
+        }        
+        
+        const links = await Links.find({})
+        res.json({ success: true, links: links });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+})
+
+
+// ROUTE 5: Update thumbnail: PUT "/api/links/thumbnail".Login required
+router.put('/thumbnail', async (req, res) => {
+    try {
+        const { _id, thumbnail} = req.body
+        let link = await Links.findById(_id)
+            link.thumbnail = thumbnail
+            await link.save()     
+        
+        const links = await Links.find({})
+        res.json({ success: true, links: links });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+})
+
 module.exports = router

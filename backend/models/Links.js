@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const LinksSchema = new Schema({
-    user:{
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
@@ -21,10 +21,12 @@ const LinksSchema = new Schema({
     removeDate: {
         type: String
     },
-    // removeTime: {
-    //     type: String,
-    //     require: true
-    // },
+    animation: {
+        type: String
+    },
+    thumbnail: {
+        type: String
+    },
     date: {
         type: Date,
         default: Date.now

@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Links = (props) => {
     const context = useContext(linkContext);
-    const { links, getLinks, editLink } = context;
+    const { links, getLinks, editLink, getSettings } = context;
     let finalLinkData = links.toReversed();
     const navigate = useNavigate();
 
@@ -16,6 +16,7 @@ const Links = (props) => {
     useEffect(() => {
         if (localStorage.getItem('token')) {
             getLinks()
+            getSettings()
             links?.length > 0 && updateLinkData(links)
             console.log("linkdata1", links)
         }else{

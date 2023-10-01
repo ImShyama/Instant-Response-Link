@@ -48,8 +48,8 @@ const Users = () => {
   return (
     <div className="container">
       {/* <caption>List of users</caption> */}
-      <div class="table-responsive" style={{ background: '#fff' }}>
-        <table class="table table-bordered table-striped table-hover">
+      <div className="table-responsive" style={{ background: '#fff' }}>
+        <table className="table table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th scope="col">S No.</th>

@@ -1,29 +1,17 @@
-import {React, useState} from 'react'
+import {React, useState, useContext} from 'react'
 import { useNavigate } from 'react-router-dom'
+import linkContext from '../context/links/linkContext';
 
 const Signup = (props) => {
+
+    const context = useContext(linkContext);
+    const { handleSubmit } = context;
+
     const [credentials, setCredentials] = useState({name:"", email:"", password:"", cpassword:""})
     const navigate = useNavigate();
 
-    const handleSubmit = async(e) => {
-        e.preventDefault();
-        const {name, email, password, cpassword} = credentials;
-        const response = await fetch(`http://localhost:5000/api/auth/createuser`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name, email, password})
-        });
-        const json = await response.json()
-        console.log(json);
-        if(json.success){
-            localStorage.setItem('token', json.authtoken);
-            navigate('/');
-            props.showAlert("Account Created Successfully", "success");
-        }else{
-            props.showAlert("Invalid Credentials", "danger");
-        }
+    const handleSubmitform = (e,credentials) =>{
+        handleSubmit(e,credentials)
     }
 
     const onChange = (e) => {
@@ -31,7 +19,7 @@ const Signup = (props) => {
     }
   return (
     <div className='form-container' style={{display:'flex',justifyContent:'center',alignItems:'center',minHeight:'80vh'}}>
-            <form onSubmit={handleSubmit} style={{  padding:'50px', background:'#fff', borderRadius:'10px'}}>
+            <form onSubmit={(e) => { handleSubmit(e, credentials,props)}} style={{  padding:'50px', background:'#fff', borderRadius:'10px'}}>
             <div className='d-flex justify-content-center mb-3'><h5>Signup</h5></div>
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">Full Name</label>

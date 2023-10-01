@@ -7,17 +7,23 @@ const SettingsSchema = new Schema({
     ref: 'User'
   },
   logo: {
-    public_id: {
-      type: String,
-      required: true,
-    },
-    url: {
-      type: String,
-      required: true,
-    },
+      type: String
   },
-  background: { type: String, require: true },
-  socialLinks: [{ type: String, required: true }]
+  header: {
+      type: String
+  },
+  description: {
+      type: String
+  },
+  backgroundImage: {
+      type: String
+  },
+  background: {
+    type: String
+  },
+  socialLinks: [{
+    type: String
+  }]
 });
 
 

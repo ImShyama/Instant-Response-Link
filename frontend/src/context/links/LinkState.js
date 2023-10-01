@@ -1,10 +1,13 @@
 import linkContext from "./linkContext";
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom'
 
 const LinkState = (props) => {
     const host = "http://localhost:5000";
     const linksInitial = []
     const [links, setLinks] = useState(linksInitial);
+    const [settings, setSettings] = useState([]);
+    const navigate = useNavigate();
 
     // Get all Links
     const getLinks = async () => {
@@ -94,12 +97,104 @@ const LinkState = (props) => {
         setLinks(newLinks);
     }
 
-    const uploadSettings = () =>{
-        
+    const addAnimation = async (e,id) =>{
+        console.log(e.target.value, id);
+        const value = e.target.value;
+        const animationId = id;
+
+        // API Call
+        const response = await fetch(`${host}/api/links/animation`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+            },
+            body: JSON.stringify({_id:animationId, animation:value})
+        });
+        const json = await response.json();
+        console.log(json);
+        // setLinks(json)
+
     }
 
+    const onChangethumbnail = async (id,thumbnail) => {
+
+        // API Call
+        const response = await fetch(`${host}/api/links/thumbnail`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+            },
+            body: JSON.stringify({_id:id, thumbnail:thumbnail})
+        });
+        const json = await response.json();
+        console.log(json);
+        // setLinks(json)
+    }
+
+
+    // Authantication context
+    // Signup
+    const handleSubmit = async(e,credentials,props) => {
+        e.preventDefault();
+        const {name, email, password, cpassword} = credentials;
+        if(password !== cpassword){
+            props.showAlert("Invalid Credentials, Password doestn't match with Confirm Password", "danger");
+            return;
+        }
+        const response = await fetch(`${host}/api/auth/createuser`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email, password})
+        });
+        const json = await response.json()
+        if(json.success){
+            localStorage.setItem('token', json.authtoken);
+            addSettings()
+            navigate('/');
+            props.showAlert("Account Created Successfully", "success");
+        }else{
+            props.showAlert("Invalid Credentials", "danger");
+        }
+    }
+
+
+    // Settings context
+    // Add Settings
+    const addSettings = async() => {
+        const logo="", header="", description="",  backgroundImage="", background="", socialLinks=[]
+        const response = await fetch(`${host}/api/settings/addsettings`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+                },
+                body: JSON.stringify({ logo, header, description,  backgroundImage, background, socialLinks })
+        });
+        const json = await response.json()
+        console.log(json);
+    }
+
+    // Get all Settings
+    const getSettings = async () => {
+        // API Call
+        const response = await fetch(`${host}/api/settings/fetchsettings`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+            }
+        });
+        const json = await response.json()
+        setSettings(json[0]);
+    }
+
+
     return (
-        <linkContext.Provider value={{ links,getLinks, addLink, deleteLink, editLink }}>
+        <linkContext.Provider value={{ links,settings, getLinks, addLink, deleteLink, editLink, addAnimation, onChangethumbnail, handleSubmit, getSettings }}>
             {props.children}
         </linkContext.Provider>
     )
