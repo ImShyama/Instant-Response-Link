@@ -1,16 +1,22 @@
-import { React, useRef, useState } from 'react'
+import { React, useState, useContext, useEffect } from 'react'
 import SocialLink from './SocialLink';
+import linkContext from '../context/links/linkContext';
 
 const AddSocialLink = () => {
 
+    const context = useContext(linkContext);
+    let { settings, getSettings, updateSocialLinks } = context;
+    console.log("setting", settings.socialLinks);
+    
     const [add, setAdd] = useState(false);
     const [links, setLink] = useState({ linkType: "", linkUrl: "" });
-    const [sLink, setSLink] = useState([]);
+    // const [sLink, setSLink] = useState(settings.socialLinks);
+    var sl = settings.socialLinks;
 
     const handleClick = (e) => {
         e.preventDefault();
-        setSLink(sLink.concat(links));
-        // setLink({inkType: "",linkUrl:""})
+        sl = [...sl,links]
+        updateSocialLinks(sl)
         setAdd(false);
     }
 
@@ -23,10 +29,14 @@ const AddSocialLink = () => {
 
     }
 
+    useEffect(() => {
+        getSettings()
+      }, [])
+
 
 
     return (
-        <div className='' style={{ paddingInline: "100px" }}>
+        <div className='' style={{  }}>
             <div className="d-flex justify-content-center my-2" style={{ backgroundColor: '#bad900', color: '#fff', borderRadius: "20px", cursor: "pointer" }} onClick={handleAdd}>
                 <span className='my-2'>{add ? <i className="fa-solid fa-minus"></i> : <i className="fa-regular fa-plus" ></i>} Add Social Link</span>
             </div>
@@ -75,18 +85,12 @@ const AddSocialLink = () => {
             }
 
             <div className='row'>
-                {console.log(sLink.length)}
-                {console.log(sLink)}
-                {sLink.length > 0 ?
-                    sLink.map((socialLink) => {
+                {settings.socialLinks?.length > 0 &&
+                    settings.socialLinks.map((socialLink) => {
                         return <SocialLink linktype={socialLink.linkType} linkurl={socialLink.linkUrl} />
-                        // return <p>{socialLink.linkType}</p>
                     })
-                    :
-                    ""
                 }
             </div>
-
         </div>
     )
 }

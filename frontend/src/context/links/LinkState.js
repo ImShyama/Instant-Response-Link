@@ -26,7 +26,7 @@ const LinkState = (props) => {
     // Add a Links
     const addLink = async (linkData) => {
         // API Call
-        const {description,link,linkType} = linkData
+        const { description, link, linkType } = linkData
         const response = await fetch(`${host}/api/links/addlink`, {
             method: 'POST',
             headers: {
@@ -49,7 +49,7 @@ const LinkState = (props) => {
         //     "__v": 0
         // }
         // console.log(linkData1)
-        
+
     }
 
     // Delete a Link
@@ -78,7 +78,7 @@ const LinkState = (props) => {
                 'Content-Type': 'application/json',
                 'auth-token': localStorage.getItem('token')
             },
-            body: JSON.stringify({description, link, linkType})
+            body: JSON.stringify({ description, link, linkType })
         });
         const json = await response.json();
         console.log(json);
@@ -97,7 +97,7 @@ const LinkState = (props) => {
         setLinks(newLinks);
     }
 
-    const addAnimation = async (e,id) =>{
+    const addAnimation = async (e, id) => {
         console.log(e.target.value, id);
         const value = e.target.value;
         const animationId = id;
@@ -109,15 +109,14 @@ const LinkState = (props) => {
                 'Content-Type': 'application/json',
                 'auth-token': localStorage.getItem('token')
             },
-            body: JSON.stringify({_id:animationId, animation:value})
+            body: JSON.stringify({ _id: animationId, animation: value })
         });
         const json = await response.json();
         console.log(json);
         // setLinks(json)
-
     }
 
-    const onChangethumbnail = async (id,thumbnail) => {
+    const onChangethumbnail = async (id, thumbnail) => {
 
         // API Call
         const response = await fetch(`${host}/api/links/thumbnail`, {
@@ -126,7 +125,7 @@ const LinkState = (props) => {
                 'Content-Type': 'application/json',
                 'auth-token': localStorage.getItem('token')
             },
-            body: JSON.stringify({_id:id, thumbnail:thumbnail})
+            body: JSON.stringify({ _id: id, thumbnail: thumbnail })
         });
         const json = await response.json();
         console.log(json);
@@ -136,10 +135,10 @@ const LinkState = (props) => {
 
     // Authantication context
     // Signup
-    const handleSubmit = async(e,credentials,props) => {
+    const handleSubmit = async (e, credentials, props) => {
         e.preventDefault();
-        const {name, email, password, cpassword} = credentials;
-        if(password !== cpassword){
+        const { name, email, password, cpassword } = credentials;
+        if (password !== cpassword) {
             props.showAlert("Invalid Credentials, Password doestn't match with Confirm Password", "danger");
             return;
         }
@@ -147,16 +146,16 @@ const LinkState = (props) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name, email, password})
+            },
+            body: JSON.stringify({ name, email, password })
         });
         const json = await response.json()
-        if(json.success){
+        if (json.success) {
             localStorage.setItem('token', json.authtoken);
             addSettings()
             navigate('/');
             props.showAlert("Account Created Successfully", "success");
-        }else{
+        } else {
             props.showAlert("Invalid Credentials", "danger");
         }
     }
@@ -164,15 +163,15 @@ const LinkState = (props) => {
 
     // Settings context
     // Add Settings
-    const addSettings = async() => {
-        const logo="", header="", description="",  backgroundImage="", background="", socialLinks=[]
+    const addSettings = async () => {
+        const logo = "", header = "", description = "", backgroundImage = "", background = "", socialLinks = []
         const response = await fetch(`${host}/api/settings/addsettings`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'auth-token': localStorage.getItem('token')
-                },
-                body: JSON.stringify({ logo, header, description,  backgroundImage, background, socialLinks })
+            },
+            body: JSON.stringify({ logo, header, description, backgroundImage, background, socialLinks })
         });
         const json = await response.json()
         console.log(json);
@@ -190,11 +189,114 @@ const LinkState = (props) => {
         });
         const json = await response.json()
         setSettings(json[0]);
+        // console.log(localStorage.getItem('token'))
+        // console.log("settings",json[0]);
+    }
+
+    // Update logo
+    const updateLogo = async (logo) => {
+        // API Call
+        console.log("logo", logo);
+        console.log("updatelogo")
+        // e.preventDefault();
+
+        const response = await fetch(`${host}/api/settings/updatelogo`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+            },
+            body: JSON.stringify({ logo: logo })
+        });
+        const json = await response.json()
+        setSettings(json);
+    }
+
+
+    // Update Background Image
+    const updateBgImage = async (image) => {
+        // API Call
+        const response = await fetch(`${host}/api/settings/updatebgimage`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+            },
+            body: JSON.stringify({ backgroundImage: image })
+        });
+        const json = await response.json()
+        setSettings(json);
+    }
+
+    // Update Background in Linear Gradiant
+    const updateLgBackground = async (bg) => {
+        // API Call
+        const response = await fetch(`${host}/api/settings/updatelgbackground`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+            },
+            body: JSON.stringify({ background: bg })
+        });
+        const json = await response.json()
+        setSettings(json);
+    }
+
+
+    // Update Social Link
+    const updateSocialLinks = async (link) => {
+        // API Call
+        const response = await fetch(`${host}/api/settings/updatesociallink`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+            },
+            body: JSON.stringify({ socialLinks: link })
+        });
+        const json = await response.json()
+        setSettings(json);
+    }
+
+    // Update Header
+    const addHeader = async (header) => {
+        // API Call
+        const response = await fetch(`${host}/api/settings/updateheader`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+            },
+            body: JSON.stringify({ header: header })
+        });
+        const json = await response.json()
+        setSettings(json);
+    }
+
+    // Update Description
+    const addDescription = async (description) => {
+        // API Call
+        const response = await fetch(`${host}/api/settings/updatedescription`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+            },
+            body: JSON.stringify({ description: description })
+        });
+        const json = await response.json()
+        setSettings(json);
     }
 
 
     return (
-        <linkContext.Provider value={{ links,settings, getLinks, addLink, deleteLink, editLink, addAnimation, onChangethumbnail, handleSubmit, getSettings }}>
+        <linkContext.Provider
+            value={{
+                links, settings, getLinks, addLink, deleteLink, editLink, addAnimation, onChangethumbnail, 
+                handleSubmit, getSettings, updateLogo, updateBgImage, updateLgBackground, updateSocialLinks,
+                addHeader, addDescription
+            }}>
             {props.children}
         </linkContext.Provider>
     )

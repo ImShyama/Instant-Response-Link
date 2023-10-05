@@ -22,7 +22,8 @@ const SettingsSchema = new Schema({
     type: String
   },
   socialLinks: [{
-    type: String
+    linkType: {type: String},
+    linkUrl: {type: String}
   }]
 });
 
