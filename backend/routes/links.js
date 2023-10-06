@@ -101,17 +101,17 @@ router.delete('/deletelink/:id', fetchuser, async (req, res) => {
 // ROUTE 4: Update animation: PUT "/api/links/animation".Login required
 router.put('/animation', fetchuser, async (req, res) => {
     try {
-        const { _id, animation} = req.body
+        const { _id, animation } = req.body
         console.log(req.body);
         let link = await Links.findById(_id)
-        if(animation != ""){
+        if (animation != "") {
             link.animation = animation
             await link.save()
-        }else{
+        } else {
             link.animation = "none"
             await link.save()
-        }        
-        
+        }
+
         const links = await Links.find({})
         res.json({ success: true, links: links });
     } catch (error) {
@@ -123,15 +123,26 @@ router.put('/animation', fetchuser, async (req, res) => {
 // ROUTE 5: Update thumbnail: PUT "/api/links/thumbnail".Login required
 router.put('/thumbnail', async (req, res) => {
     try {
-        const { _id, thumbnail} = req.body
+        const { _id, thumbnail } = req.body
         let link = await Links.findById(_id)
-            link.thumbnail = thumbnail
-            await link.save()     
-        
-        const links = await Links.find({})
+        link.thumbnail = thumbnail
+        const links = await link.save()
+
         res.json({ success: true, links: links });
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
+    }
+})
+
+// ROUTE 6: Get All the Links of perticular ID using: GET "/api/settings/loadlinks".Login required
+router.get('/loadlinks/:id', async (req, res) => {
+    try {
+        const id = req.params.id
+        const links = await Links.find({ user: id })
+        res.json(links)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error")
     }
 })
 

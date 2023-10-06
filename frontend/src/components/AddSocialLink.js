@@ -6,7 +6,7 @@ const AddSocialLink = () => {
 
     const context = useContext(linkContext);
     let { settings, getSettings, updateSocialLinks } = context;
-    console.log("setting", settings.socialLinks);
+    console.log("setting", settings);
     
     const [add, setAdd] = useState(false);
     const [links, setLink] = useState({ linkType: "", linkUrl: "" });

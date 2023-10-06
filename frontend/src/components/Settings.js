@@ -1,7 +1,6 @@
 import { React, useState, useEffect, useContext, useRef } from 'react'
 import AddSocialLink from './AddSocialLink';
 import linkContext from '../context/links/linkContext';
-import { Tooltip } from 'react-tooltip'
 
 const Settings = () => {
   const context = useContext(linkContext);
@@ -48,7 +47,7 @@ const Settings = () => {
       var id = logoUrl.match(/[-\w]{25,}/)[0];
       logoUrl = 'http://drive.google.com/uc?export=view&id=' + id;
     } else {
-      logoUrl = settings.logo;
+      logoUrl = logoUrl;
     }
     return logoUrl
   }
@@ -100,6 +99,22 @@ const Settings = () => {
   const handledescription = () => {
     console.log(description)
     addDescription(description)
+  }
+
+  const handleAddleft = () =>{
+
+  }
+
+  const onChangeleft = () =>{
+
+  }
+
+  const handleAddright = () =>{
+
+  }
+
+  const onChangeright = () =>{
+
   }
 
   useEffect(() => {
@@ -216,7 +231,7 @@ const Settings = () => {
           <div className=''>
             <div className="horizontal-gradient" style={{ width: '120px', height: '80px', background: `${settings.background && lgBackground(settings.background)}` }}></div>
           </div>
-          <div className='my-auto' style={{maxWidth:"120px"}}>
+          <div className='my-auto' style={{ maxWidth: "120px" }}>
             <select className="form-select my-1 p-1" aria-label="" value={settings.background && lgvBackground(settings.background)} onChange={handleBackground}>
               <option selected>Background</option>
               {bgList.map((list) => (
@@ -227,7 +242,7 @@ const Settings = () => {
         </div>
       </div>
 
-      
+
       <div className='d-flex justify-content-center my-3'>
         <div className="input-group " style={{}}>
           <input type="text" className="form-control" placeholder="Add Header" aria-label="Add Header" aria-describedby="button-addon2" value={header} onChange={onchangeHeader} />
@@ -250,9 +265,29 @@ const Settings = () => {
         </div>
       </div>
 
-      <div >
-        {<AddSocialLink />}
+      <div className='d-flex justify-content-center my-3'>
+        <div class="input-group">
+          <span>
+            <input type="text" class="form-control" name='linkUrl' aria-label="Text input with dropdown button" onChange={onChangeleft} placeholder='Left Footer Name' />
+          </span>
+
+          <input type="text" class="form-control" name='linkUrl' aria-label="Text input with dropdown button" onChange={onChangeleft} placeholder='Left Footer URL' />
+          <button type="button" class="btn btn-primary" onClick={handleAddleft}>ADD</button>
+        </div>
       </div>
+
+      <div className='d-flex justify-content-center my-3'>
+        <div class="input-group">
+          <span>
+            <input type="text" class="form-control" name='linkUrl' aria-label="Text input with dropdown button" onChange={onChangeright} placeholder='Right Footer Name' />
+          </span>
+
+          <input type="text" class="form-control" name='linkUrl' aria-label="Text input with dropdown button" onChange={onChangeright} placeholder='Right Footer URL' />
+          <button type="button" class="btn btn-primary" onClick={handleAddleft}>ADD</button>
+        </div>
+      </div>
+
+      {<AddSocialLink />}
     </div>
   )
 }

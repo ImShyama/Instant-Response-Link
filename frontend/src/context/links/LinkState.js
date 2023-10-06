@@ -7,6 +7,8 @@ const LinkState = (props) => {
     const linksInitial = []
     const [links, setLinks] = useState(linksInitial);
     const [settings, setSettings] = useState([]);
+    const [viewlinks, setViewlinks] = useState([]);
+    const [viewsetting, setViewsetting] = useState(null);
     const navigate = useNavigate();
 
     // Get all Links
@@ -189,8 +191,6 @@ const LinkState = (props) => {
         });
         const json = await response.json()
         setSettings(json[0]);
-        // console.log(localStorage.getItem('token'))
-        // console.log("settings",json[0]);
     }
 
     // Update logo
@@ -289,13 +289,39 @@ const LinkState = (props) => {
         setSettings(json);
     }
 
+    // Load Settings
+    const loadSettings = async(id) =>{
+        // API Call
+        const response = await fetch(`${host}/api/settings/loadsetting/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const json = await response.json()
+        setViewsetting(json);
+    }
+
+    // Load Links
+    const loadLinks = async(id) => {
+        // API Call
+        const response = await fetch(`${host}/api/links/loadlinks/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const json = await response.json()
+        setViewlinks(json);
+    }
+
 
     return (
         <linkContext.Provider
             value={{
-                links, settings, getLinks, addLink, deleteLink, editLink, addAnimation, onChangethumbnail, 
+                links, settings, viewlinks, viewsetting, getLinks, addLink, deleteLink, editLink, addAnimation, onChangethumbnail, 
                 handleSubmit, getSettings, updateLogo, updateBgImage, updateLgBackground, updateSocialLinks,
-                addHeader, addDescription
+                addHeader, addDescription, loadLinks, loadSettings
             }}>
             {props.children}
         </linkContext.Provider>

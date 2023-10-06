@@ -1,4 +1,4 @@
-import { React, useContext, useState } from 'react'
+import { React, useContext, useState, useRef } from 'react'
 import linkContext from '../context/links/linkContext';
 import { Draggable } from 'react-beautiful-dnd';
 
@@ -7,6 +7,7 @@ const Linkitem = (props) => {
     const context = useContext(linkContext);
     const { deleteLink, addAnimation, onChangethumbnail } = context;
     const { index, link, updateLink } = props;
+    const refCloseThumbnail = useRef(null)
     
     // let thumbnailUrl = link.thumbnail ? link.thumbnail : ""
     const [thumbnail, setThumbnail] = useState("");
@@ -16,6 +17,7 @@ const Linkitem = (props) => {
     const uploadThumbnail = (id) =>{
         console.log(thumbnail);
         onChangethumbnail(id,thumbnail)
+        refCloseThumbnail.current.click()
     }
 
     const onChange = (e) => {
@@ -55,7 +57,7 @@ const Linkitem = (props) => {
                                     <option value="Colour highlighter">Colour highlighter</option>
                                 </select>
                             </label>
-                            <button type="button" className="btn btn-none" id='file' data-bs-toggle="modal" data-bs-target="#myModal">
+                            <button type="button" className="btn btn-none shadow-none" id='file' data-bs-toggle="modal" data-bs-target="#thumbnail">
                                 <i htmlFor="file" className="fa-regular fa-image "></i>
                             </button>
                             {/* <input type='file' id='file' style={{ display: 'none' }} onChange={(e) => onChangethumbnail(e,link._id)} /> */}
@@ -68,7 +70,7 @@ const Linkitem = (props) => {
             </div>
 
             {/* The Modal  */}
-            <div className="modal" id="myModal">
+            <div className="modal" id="thumbnail">
                 <div className="modal-dialog modal-sm">
                     <div className="modal-content">
 
@@ -86,7 +88,7 @@ const Linkitem = (props) => {
 
                         {/* Modal footer  */}
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            <button type="button" ref={refCloseThumbnail} className="btn btn-danger" data-bs-dismiss="modal">Close</button>
                             <button
                                 type="button" className="btn btn-primary" onClick={() => uploadThumbnail(link._id)}>Update Link</button>
                         </div>

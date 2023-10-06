@@ -22,7 +22,7 @@ router.post('/addsettings', fetchuser, async (req, res) => {
     }
 })
 
-// ROUTE 2: Get All the Settings using: GET "/api/settings/addsettings".Login required
+// ROUTE 2: Get All the Settings using: GET "/api/settings/fetchsettings".Login required
 router.get('/fetchsettings', fetchuser, async (req, res) => {
     try {
         const settings = await Settings.find({ user: req.user.id })
@@ -111,7 +111,7 @@ router.put('/updateheader', fetchuser, async (req, res) => {
 })
 
 
-// ROUTE 7: Update description Settings using: PUT "/api/settings/updatedescription".Login required
+// ROUTE 8: Update description Settings using: PUT "/api/settings/updatedescription".Login required
 router.put('/updatedescription', fetchuser, async (req, res) => {
     try {
         const { description } = req.body;
@@ -119,6 +119,18 @@ router.put('/updatedescription', fetchuser, async (req, res) => {
         settings[0].description = description;
         const savedSetting = await settings[0].save()
         res.json(savedSetting)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error")
+    }
+})
+
+// ROUTE 9: Get All the Settings of perticular ID using: GET "/api/settings/loadsetting".Login required
+router.get('/loadsetting/:id', async (req, res) => {
+    try {
+        const id = req.params.id
+        const settings = await Settings.findOne({ user: id })
+        res.json(settings)
     } catch (error) {
         console.log(error);
         res.status(500).send("Internal Server Error")
