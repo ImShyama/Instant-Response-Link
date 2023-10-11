@@ -7,7 +7,7 @@ const AddSocialLink = () => {
     const context = useContext(linkContext);
     let { settings, getSettings, updateSocialLinks } = context;
     console.log("setting", settings);
-    
+
     const [add, setAdd] = useState(false);
     const [links, setLink] = useState({ linkType: "", linkUrl: "" });
     // const [sLink, setSLink] = useState(settings.socialLinks);
@@ -15,7 +15,7 @@ const AddSocialLink = () => {
 
     const handleClick = (e) => {
         e.preventDefault();
-        sl = [...sl,links]
+        sl = [...sl, links]
         updateSocialLinks(sl)
         setAdd(false);
     }
@@ -31,12 +31,12 @@ const AddSocialLink = () => {
 
     useEffect(() => {
         getSettings()
-      }, [])
+    }, [])
 
 
 
     return (
-        <div className='' style={{  }}>
+        <div className='' style={{}}>
             <div className="d-flex justify-content-center my-2" style={{ backgroundColor: '#bad900', color: '#fff', borderRadius: "20px", cursor: "pointer" }} onClick={handleAdd}>
                 <span className='my-2'>{add ? <i className="fa-solid fa-minus"></i> : <i className="fa-regular fa-plus" ></i>} Add Social Link</span>
             </div>
@@ -53,7 +53,6 @@ const AddSocialLink = () => {
                                     <option value="Twitter">Twitter</option>
                                     <option value="Facebook">Facebook</option>
                                     <option value="Instagram">Instagram</option>
-                                    <option value="Github">Github</option>
                                     <option value="Other">Other</option>
                                 </select>
                             </span>
@@ -84,7 +83,7 @@ const AddSocialLink = () => {
 
             }
 
-            <div className='row'>
+            <div className='d-flex justify-content-center'>
                 {settings.socialLinks?.length > 0 &&
                     settings.socialLinks.map((socialLink) => {
                         return <SocialLink linktype={socialLink.linkType} linkurl={socialLink.linkUrl} />

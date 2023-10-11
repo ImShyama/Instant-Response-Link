@@ -1,7 +1,7 @@
 const express = require('express')
 const fetchuser = require('../middleware/fetchuser')
 const router = express.Router()
-const Links = require('../models/Links');
+const {Links, Clicks} = require('../models/Links');
 const { body, validationResult } = require('express-validator');
 
 // ROUTE 1: Get All the Links using: GET "/api/links/fetchlinks".Login required
@@ -134,6 +134,7 @@ router.put('/thumbnail', async (req, res) => {
     }
 })
 
+
 // ROUTE 6: Get All the Links of perticular ID using: GET "/api/settings/loadlinks".Login required
 router.get('/loadlinks/:id', async (req, res) => {
     try {
@@ -145,5 +146,48 @@ router.get('/loadlinks/:id', async (req, res) => {
         res.status(500).send("Internal Server Error")
     }
 })
+
+// ROUTE 7: Update click counts: PUT "/api/links/incCount/:id".Login not required
+// router.put('/incCount', async (req, res) => {
+//     try {
+//         const { id } = req.body
+//         let link = await Links.updateOne({_id:id}, {$inc : {clicks: 1}})
+//         res.json({ success: true });
+//     } catch (error) {
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
+// })
+
+
+
+
+// ---- Clicks Routes --------- //
+
+// ROUTE 1: Add a new Links using: POST "/api/links/addClicks".Login not required
+router.post('/addClicks', async (req, res) => {
+    try {
+        const { city, country, latitude, longitude,linkID, linkUrl } = req.body;
+        const clickData = new Clicks({
+            city, country, latitude, longitude,linkID, linkUrl
+        });
+        const savedClick = await clickData.save()
+        res.json(savedClick)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error")
+    }
+})
+
+// ROUTE 2: Get All the Clicks using: GET "/api/links/fetchclicks".Login required
+router.get('/fetchclicks', async (req, res) => {
+    try {
+        const clicks = await Clicks.find({})
+        res.json(clicks)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error")
+    }
+})
+
 
 module.exports = router

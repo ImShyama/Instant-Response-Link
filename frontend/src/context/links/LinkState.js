@@ -4,12 +4,16 @@ import { useNavigate } from 'react-router-dom'
 
 const LinkState = (props) => {
     const host = "http://localhost:5000";
+    const publicUrl = "http://localhost:3000";
     const linksInitial = []
     const [links, setLinks] = useState(linksInitial);
+    const [clicks, setClicks] = useState([]);
     const [settings, setSettings] = useState([]);
     const [viewlinks, setViewlinks] = useState([]);
     const [viewsetting, setViewsetting] = useState(null);
     const navigate = useNavigate();
+    const previewUrl = `${publicUrl}/view/${settings.user}`
+    console.log(previewUrl);
 
     // Get all Links
     const getLinks = async () => {
@@ -259,6 +263,36 @@ const LinkState = (props) => {
         setSettings(json);
     }
 
+    // Update Left Footer
+    const updateleftfooter = async (link) => {
+        // API Call
+        const response = await fetch(`${host}/api/settings/leftfooter`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+            },
+            body: JSON.stringify({ leftFooter: link })
+        });
+        const json = await response.json()
+        setSettings(json);
+    }
+
+    // Update Right Footer
+    const updaterightfooter = async (link) => {
+        // API Call
+        const response = await fetch(`${host}/api/settings/rightfooter`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+            },
+            body: JSON.stringify({ rightFooter: link })
+        });
+        const json = await response.json()
+        setSettings(json);
+    }
+
     // Update Header
     const addHeader = async (header) => {
         // API Call
@@ -290,7 +324,7 @@ const LinkState = (props) => {
     }
 
     // Load Settings
-    const loadSettings = async(id) =>{
+    const loadSettings = async (id) => {
         // API Call
         const response = await fetch(`${host}/api/settings/loadsetting/${id}`, {
             method: 'GET',
@@ -303,7 +337,7 @@ const LinkState = (props) => {
     }
 
     // Load Links
-    const loadLinks = async(id) => {
+    const loadLinks = async (id) => {
         // API Call
         const response = await fetch(`${host}/api/links/loadlinks/${id}`, {
             method: 'GET',
@@ -315,13 +349,63 @@ const LinkState = (props) => {
         setViewlinks(json);
     }
 
+    // set footer ture false
+    const handleFooter = async () => {
+        const response = await fetch(`${host}/api/settings/handlefooter`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+            }
+        });
+        const json = await response.json()
+        setSettings(json);
+    }
+
+    // set footer ture false
+    const handleSearch = async () => {
+        const response = await fetch(`${host}/api/settings/handlesearch`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+            }
+        });
+        const json = await response.json()
+        setSettings(json);
+    }
+
+    const addClickInfo = async (data) => {
+        const response = await fetch(`${host}/api/links/addClicks`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        const json = await response.json()
+        // setLinks(json);
+    }
+
+    const fetchclicks = async () => {
+        // API Call
+        const response = await fetch(`${host}/api/links/fetchclicks`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const json = await response.json()
+        setClicks(json)
+    }
+
 
     return (
         <linkContext.Provider
             value={{
-                links, settings, viewlinks, viewsetting, getLinks, addLink, deleteLink, editLink, addAnimation, onChangethumbnail, 
+                links, settings, previewUrl, viewlinks, viewsetting,clicks, fetchclicks, getLinks, addLink, deleteLink, editLink, addAnimation, onChangethumbnail,
                 handleSubmit, getSettings, updateLogo, updateBgImage, updateLgBackground, updateSocialLinks,
-                addHeader, addDescription, loadLinks, loadSettings
+                addHeader, addDescription, loadLinks, loadSettings, updaterightfooter, updateleftfooter, handleFooter, handleSearch, addClickInfo
             }}>
             {props.children}
         </linkContext.Provider>

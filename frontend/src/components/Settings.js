@@ -1,12 +1,18 @@
 import { React, useState, useEffect, useContext, useRef } from 'react'
 import AddSocialLink from './AddSocialLink';
 import linkContext from '../context/links/linkContext';
+import Preview from './Preview';
 
 const Settings = () => {
   const context = useContext(linkContext);
-  let { settings, getSettings, updateLogo, updateBgImage, updateLgBackground, addHeader, addDescription } = context;
+  let { settings, getLinks, links, previewUrl, getSettings, updateLogo, updateBgImage,
+    updateLgBackground, addHeader, addDescription,
+    updaterightfooter, updateleftfooter, handleFooter,
+    handleSearch, clicks, fetchclicks } = context;
 
-  const [backGround, setBackGround] = useState(null)
+    console.log("clicks",clicks);
+
+  // const [backGround, setBackGround] = useState(null)
 
   const bgList = [['Roseanna', "#ffafbd → #ffc3a0"],
   ['Purple Love', '#cc2b5e → #753a88'], ['Piglet', '#ee9ca7 → #ffdde1'],
@@ -32,7 +38,6 @@ const Settings = () => {
     const temp = bgList.filter((row) => {
       return row[1] === value
     })
-    console.log(temp[0][0])
     return temp[0][0];
   }
 
@@ -40,18 +45,17 @@ const Settings = () => {
   // Logo settings
   const [logo, setlogo] = useState(settings.logo);
 
-  const info = `1920px:1200px`
+  // const info = `1920px:1200px`
 
   const DriveUrl = (logoUrl) => {
+    let link = logoUrl
     if (logoUrl?.indexOf("https://drive.google.com") > -1) {
       var id = logoUrl.match(/[-\w]{25,}/)[0];
-      logoUrl = 'http://drive.google.com/uc?export=view&id=' + id;
-    } else {
-      logoUrl = logoUrl;
+      link = 'http://drive.google.com/uc?export=view&id=' + id;
     }
-    return logoUrl
+    return link
   }
-  const logoUrl = DriveUrl(settings.logo);
+
   const refCloseLogo = useRef(null)
   const onChangeLogo = (e) => {
     const value = e.target.value;
@@ -59,8 +63,6 @@ const Settings = () => {
   }
 
   const handleUpdateLogo = () => {
-    console.log(logo)
-    updateLogo(logo)
     refCloseLogo.current.click()
   }
 
@@ -84,44 +86,47 @@ const Settings = () => {
   const [header, setHeader] = useState(settings.header)
   const onchangeHeader = (e) => {
     setHeader(e.target.value)
-    console.log(header)
   }
   const handleheader = () => {
-    console.log(header)
     addHeader(header)
   }
 
   const [description, setDescription] = useState(settings.description)
   const onchangeDescription = (e) => {
     setDescription(e.target.value)
-    console.log(description)
   }
   const handledescription = () => {
-    console.log(description)
     addDescription(description)
   }
 
-  const handleAddleft = () =>{
-
+  // left footer
+  const [leftFooter, setLeftFooter] = useState({ leftFooterName: "", leftFooterURL: "" });
+  // const [leftFooter, setLeftFooter] = useState(settings.leftFooter && settings.leftFooter[0]);
+  const [leftfooter, setleftfooter] = useState(settings.leftFooter && settings.leftFooter[0])
+  const onChangeleft = (e) => {
+    setLeftFooter({ ...leftFooter, [e.target.name]: e.target.value })
+    setleftfooter({ ...leftfooter, [e.target.name]: e.target.value })
+  }
+  const handleAddleft = () => {
+    updateleftfooter(leftFooter)
   }
 
-  const onChangeleft = () =>{
 
+  // right footer
+  const [rightFooter, setRightFooter] = useState({ rightFooterName: "", rightFooterURL: "" });
+  const onChangeright = (e) => {
+    setRightFooter({ ...rightFooter, [e.target.name]: e.target.value })
   }
-
-  const handleAddright = () =>{
-
-  }
-
-  const onChangeright = () =>{
-
+  const handleAddright = () => {
+    updaterightfooter(rightFooter)
   }
 
   useEffect(() => {
     getSettings()
+    getLinks()
+    fetchclicks()
   }, [])
 
-  // console.log("settings", settings.socialLinks);
 
   return (
     <div className=''>
@@ -136,6 +141,39 @@ const Settings = () => {
         <h2>Settings</h2>
       </div>
 
+      <div className='d-flex justify-content-center my-3'>
+        <div className="input-group " style={{}}>
+          {/* <!-- Button trigger modal --> */}
+          <button className="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#previewModel" ><i class="fa-solid fa-circle-info"></i></button>
+
+          {/* <button type="button" className="btn btn-none shadow-none" data-bs-toggle="modal" data-bs-target="#uploadImageModel">
+                <i className="fa-solid fa-upload"></i>
+              </button> */}
+          <input type="text" className="form-control" aria-label="Add Header" aria-describedby="button-addon2" value={previewUrl} onChange={onchangeHeader} disabled />
+          <button className="btn btn-outline-success" type="button" id="button-addon2" onClick={() => { navigator.clipboard.writeText(previewUrl) }} ><i class="fa-regular fa-copy"></i></button>
+          {/* {settings.header === "" ?
+            <button className="btn btn-primary" type="button" id="button-addon2" onClick={handleheader} >Add</button> :
+            <button className="btn btn-primary" type="button" id="button-addon2" >Edit</button>
+          } */}
+        </div>
+        {/* <!-- Modal --> */}
+        <div className="modal fade" id="previewModel" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-lg">
+            <div className="modal-content">
+              {/* <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">Preview</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div> */}
+              {(links?.length > 0 && settings.logo) && <Preview viewsetting={settings} viewlinks={links} />}
+              {/* <div className="modal-footer">
+                <button type="button" ref={refCloseLogo} className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" className="btn btn-primary" onClick={handleUpdateLogo}>Save changes</button>
+              </div> */}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="d-flex justify-content-evenly">
         <div>
           <div className='' style={{
@@ -143,7 +181,7 @@ const Settings = () => {
             width: "80px",
             // border: "1px solid black"
           }}>
-            {settings.logo && <img src={logoUrl} alt="Logo Image" style={{ height: "80px", width: "80px", objectFit: "contain" }} />}
+            {settings.logo && <img src={DriveUrl(settings.logo)} alt="Logo" style={{ height: "80px", width: "80px", objectFit: "contain" }} />}
           </div>
           <div className='d-flex justify-content-start align-items-center'>
             <div className='' style={{
@@ -154,7 +192,7 @@ const Settings = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              margin: "10px"
+              margin: "5px"
             }}>
               {/* <!-- Button trigger modal --> */}
               <button type="button" className="btn btn-none shadow-none" data-bs-toggle="modal" data-bs-target="#uploadImageModel">
@@ -188,7 +226,7 @@ const Settings = () => {
             width: "120px",
             // border: "1px solid black"
           }}>
-            {settings.backgroundImage && <img src={imageUrl} alt="Background Image" style={{ height: "80px", width: "120px", objectFit: "contain" }} />}
+            {settings.backgroundImage && <img src={imageUrl} alt="Background" style={{ height: "80px", width: "120px", objectFit: "contain" }} />}
           </div>
           <div className='d-flex align-items-center'>
             <div className='' style={{
@@ -242,7 +280,6 @@ const Settings = () => {
         </div>
       </div>
 
-
       <div className='d-flex justify-content-center my-3'>
         <div className="input-group " style={{}}>
           <input type="text" className="form-control" placeholder="Add Header" aria-label="Add Header" aria-describedby="button-addon2" value={header} onChange={onchangeHeader} />
@@ -265,27 +302,50 @@ const Settings = () => {
         </div>
       </div>
 
-      <div className='d-flex justify-content-center my-3'>
-        <div class="input-group">
-          <span>
-            <input type="text" class="form-control" name='linkUrl' aria-label="Text input with dropdown button" onChange={onChangeleft} placeholder='Left Footer Name' />
-          </span>
+      <div className='d-flex justify-conten my-3'>
+        <div class="form-check form-switch">
+          <input
+            type="checkbox"
+            checked={settings.footer}
+            onChange={handleFooter}
+            className="form-check-input"
+          />
+          <label class="form-check-label" for="flexSwitchCheckChecked">Footer</label>
+        </div>
 
-          <input type="text" class="form-control" name='linkUrl' aria-label="Text input with dropdown button" onChange={onChangeleft} placeholder='Left Footer URL' />
-          <button type="button" class="btn btn-primary" onClick={handleAddleft}>ADD</button>
+        <div class="form-check form-switch mx-5">
+          <input
+            type="checkbox"
+            checked={settings.search}
+            onChange={handleSearch}
+            className="form-check-input"
+          />
+          <label class="form-check-label" for="flexSwitchCheckChecked">Search</label>
         </div>
       </div>
 
-      <div className='d-flex justify-content-center my-3'>
-        <div class="input-group">
-          <span>
-            <input type="text" class="form-control" name='linkUrl' aria-label="Text input with dropdown button" onChange={onChangeright} placeholder='Right Footer Name' />
-          </span>
-
-          <input type="text" class="form-control" name='linkUrl' aria-label="Text input with dropdown button" onChange={onChangeright} placeholder='Right Footer URL' />
-          <button type="button" class="btn btn-primary" onClick={handleAddleft}>ADD</button>
+      {settings.footer && <div>
+        <div className='d-flex justify-content-center my-3'>
+          <div class="input-group">
+            <span>
+              <input type="text" class="form-control" name='leftFooterName' aria-label="Text input with dropdown button" onChange={onChangeleft} placeholder='Left Footer Name' />
+            </span>
+            <input type="text" class="form-control" name='leftFooterURL' aria-label="Text input with dropdown button" onChange={onChangeleft} placeholder='Left Footer URL' />
+            <button type="button" class="btn btn-primary" onClick={handleAddleft}>ADD</button>
+          </div>
         </div>
-      </div>
+
+        <div className='d-flex justify-content-center my-3'>
+          <div class="input-group">
+            <span>
+              <input type="text" class="form-control" name='rightFooterName' aria-label="Text input with dropdown button" onChange={onChangeright} placeholder='Right Footer Name' />
+            </span>
+            <input type="text" class="form-control" name='rightFooterURL' aria-label="Text input with dropdown button" onChange={onChangeright} placeholder='Right Footer URL' />
+            <button type="button" class="btn btn-primary" onClick={handleAddright}>ADD</button>
+          </div>
+        </div>
+      </div>}
+
 
       {<AddSocialLink />}
     </div>

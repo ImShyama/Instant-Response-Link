@@ -33,4 +33,19 @@ const LinksSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('links', LinksSchema)
+const clickDataSchema = mongoose.Schema({
+    city: String,
+    country: String,
+    latitude: String,
+    longitude: String,
+    linkID: String,
+    linkUrl: String
+})
+
+const Links = mongoose.model('links', LinksSchema);
+const Clicks = mongoose.model('clicks', clickDataSchema);
+
+module.exports = {
+    Links,
+    Clicks
+}

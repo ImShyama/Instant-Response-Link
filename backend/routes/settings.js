@@ -137,6 +137,70 @@ router.get('/loadsetting/:id', async (req, res) => {
     }
 })
 
+// ROUTE 10: Update Left Footer Settings using: PUT "/api/settings/leftfooter".Login required
+router.put('/leftfooter', fetchuser, async (req, res) => {
+    try {
+        const { leftFooter } = req.body;
+        const settings = await Settings.findOneAndUpdate({ user: req.user.id }, {
+            leftFooter: leftFooter
+        });
+        res.json(settings)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error")
+    }
+})
+
+// ROUTE 10: Update Right Footer Settings using: PUT "/api/settings/rightfooter".Login required
+router.put('/rightfooter', fetchuser, async (req, res) => {
+    try {
+        const { rightFooter } = req.body;
+        const settings = await Settings.findOneAndUpdate({ user: req.user.id }, {
+            rightFooter: rightFooter
+        });
+        res.json(settings)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error")
+    }
+})
+
+// ROUTE 11: Update handle footer (set true or false) Settings using: PUT "/api/settings/handlefooter".Login required
+router.put('/handlefooter', fetchuser, async (req, res) => {
+    try {
+        const settings = await Settings.findOne({ user: req.user.id })
+        if(settings.footer){
+            settings.footer = false
+            await settings.save()
+        }else{
+            settings.footer = true
+            await settings.save()
+        }
+        res.json(settings)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error")
+    }
+})
+
+// ROUTE 12: Update handle search (set true or false) Settings using: PUT "/api/settings/handlesearch".Login required
+router.put('/handlesearch', fetchuser, async (req, res) => {
+    try {
+        const settings = await Settings.findOne({ user: req.user.id })
+        if(settings.search){
+            settings.search = false
+            await settings.save()
+        }else{
+            settings.search = true
+            await settings.save()
+        }
+        res.json(settings)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error")
+    }
+})
+
 
 // // ROUTE 1: Update an existing Link using: PUT "/api/settings/updatelink/:id".Login required
 // router.put('/updatesettings/:id', fetchuser, async (req, res) => {
