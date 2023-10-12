@@ -144,17 +144,9 @@ const Settings = () => {
       <div className='d-flex justify-content-center my-3'>
         <div className="input-group " style={{}}>
           {/* <!-- Button trigger modal --> */}
-          <button className="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#previewModel" ><i class="fa-solid fa-circle-info"></i></button>
-
-          {/* <button type="button" className="btn btn-none shadow-none" data-bs-toggle="modal" data-bs-target="#uploadImageModel">
-                <i className="fa-solid fa-upload"></i>
-              </button> */}
+          <button className="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#previewModel" ><i class="fa-solid fa-eye"></i></button>
           <input type="text" className="form-control" aria-label="Add Header" aria-describedby="button-addon2" value={previewUrl} onChange={onchangeHeader} disabled />
           <button className="btn btn-outline-success" type="button" id="button-addon2" onClick={() => { navigator.clipboard.writeText(previewUrl) }} ><i class="fa-regular fa-copy"></i></button>
-          {/* {settings.header === "" ?
-            <button className="btn btn-primary" type="button" id="button-addon2" onClick={handleheader} >Add</button> :
-            <button className="btn btn-primary" type="button" id="button-addon2" >Edit</button>
-          } */}
         </div>
         {/* <!-- Modal --> */}
         <div className="modal fade" id="previewModel" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -165,10 +157,6 @@ const Settings = () => {
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div> */}
               {(links?.length > 0 && settings.logo) && <Preview viewsetting={settings} viewlinks={links} />}
-              {/* <div className="modal-footer">
-                <button type="button" ref={refCloseLogo} className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" className="btn btn-primary" onClick={handleUpdateLogo}>Save changes</button>
-              </div> */}
             </div>
           </div>
         </div>

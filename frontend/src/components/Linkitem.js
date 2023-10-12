@@ -63,15 +63,14 @@ const Linkitem = (props) => {
                                 </select>
                             </label>
                             <label className='m-1 p-1'>
-                            {/* <button type="button" className="btn btn-none shadow-none" style={{ paddingTop: "3px" }} id='file' data-bs-toggle="modal" data-bs-target="#thumbnail"> */}
-                                <button type="button" onClick={() => showTable(link._id)} style={{ border: 'none', background: 'none', cursor: 'pointer' }} data-bs-toggle="modal" data-bs-target="#clickTable">
+                                <button type="button" onClick={() => showTable(link._id)} style={{ border: 'none', background: 'none', cursor: 'pointer' }} data-bs-toggle="modal" data-bs-target={'#clickTable'+index}>
                                     <p>{filterClicks?.length}</p>
                                 </button>
 
                             </label>
 
                             <label>
-                                <button type="button" className="btn btn-none shadow-none" style={{ paddingTop: "3px" }} id='file' data-bs-toggle="modal" data-bs-target="#thumbnail">
+                                <button type="button" className="btn btn-none shadow-none" style={{ paddingTop: "3px" }} id='file' data-bs-toggle="modal" data-bs-target={"#thumbnail"+index}>
                                     <i htmlFor="file" className="fa-regular fa-image "></i>
                                 </button>
                             </label>
@@ -85,7 +84,7 @@ const Linkitem = (props) => {
             </div>
 
             {/* The Modal for thumbnail upload */}
-            <div className="modal" id="thumbnail">
+            <div className="modal" id={"thumbnail"+index}>
                 <div className="modal-dialog modal-sm">
                     <div className="modal-content">
 
@@ -113,7 +112,7 @@ const Linkitem = (props) => {
             </div>
 
             {/* The Modal for clicks table  */}
-            <div className="modal" id="clickTable">
+            <div className="modal" id={"clickTable"+index}>
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
 
@@ -125,18 +124,9 @@ const Linkitem = (props) => {
 
                         {/* Modal body */}
                         <div className="modal-body">
-                            {/* Enter thumbnail URL Link
-                            <input type="text" className="form-control" id="thumbnailInput" onChange={onChange} /> */}
-                            <Table data = {filterClick}/>
+                           {/* <Table data = {filterClick}/> */}
+                            {typeof filterClick !== 'undefined' && <Table data = {filterClick}/>}
                         </div>
-
-                        {/* Modal footer  */}
-                        {/* <div className="modal-footer">
-                            <button type="button" ref={refCloseThumbnail} className="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button
-                                type="button" className="btn btn-primary" onClick={() => uploadThumbnail(link._id)}>Update Link</button>
-                        </div> */}
-
                     </div>
                 </div>
             </div>
