@@ -1,143 +1,229 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import linkContext from '../context/links/linkContext';
-import Linkitem from './Linkitem';
-import Addlink from './Addlink';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import linkContext from "../context/links/linkContext";
+import Linkitem from "./Linkitem";
+import Addlink from "./Addlink";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { useNavigate } from "react-router-dom";
 
 const Links = (props) => {
-    const context = useContext(linkContext);
-    const { links, getLinks, editLink, getSettings } = context;
-    let finalLinkData = links.toReversed();
-    const navigate = useNavigate();
+  const context = useContext(linkContext);
+  const { links, getLinks, editLink, getSettings } = context;
+  let finalLinkData = links.toReversed();
+  const navigate = useNavigate();
 
-    const [linkData, updateLinkData] = useState(finalLinkData);
+  const [linkData, updateLinkData] = useState(finalLinkData);
 
-    useEffect(() => {
-        if (localStorage.getItem('token')) {
-            getLinks()
-            getSettings()
-            links?.length > 0 && updateLinkData(links)
-            console.log("linkdata1", links)
-        }else{
-            navigate('/login')
-        }
-        // eslint-disable-next-line
-    }, [])
-
-    const ref = useRef(null)
-    const refClose = useRef(null)
-    const [link, setLink] = useState({ id: "", edescription: "", elink: "", elinkType: "" });
-
-    const updateLink = (currentLink) => {
-        ref.current.click()
-        setLink({ id: currentLink._id, edescription: currentLink.description, elink: currentLink.link, elinkType: currentLink.linkType });
-
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      getLinks();
+      getSettings();
+      links?.length > 0 && updateLinkData(links);
+      console.log("linkdata1", links);
+    } else {
+      navigate("/login");
     }
+    // eslint-disable-next-line
+  }, []);
 
-    const handleClick = (e) => {
-        editLink(link.id, link.edescription, link.elink, link.elinkType);
-        refClose.current.click()
-        props.showAlert("Updated Successfully", "success");
-        // addLink(link);
-    }
+  const ref = useRef(null);
+  const refClose = useRef(null);
+  const [link, setLink] = useState({
+    id: "",
+    edescription: "",
+    elink: "",
+    elinkType: "",
+  });
 
-    const onChange = (e) => {
-        setLink({ ...link, [e.target.name]: e.target.value })
-    }
+  const updateLink = (currentLink) => {
+    ref.current.click();
+    setLink({
+      id: currentLink._id,
+      edescription: currentLink.description,
+      elink: currentLink.link,
+      elinkType: currentLink.linkType,
+    });
+  };
 
-    const handleOnDragEnd = (result) => {
-        // TODO: reorder our column
-        console.log(result);
-        console.log("linkdata", linkData);
-        // if (!result.destination) return;
+  const handleClick = (e) => {
+    editLink(link.id, link.edescription, link.elink, link.elinkType);
+    refClose.current.click();
+    props.showAlert("Updated Successfully", "success");
+    // addLink(link);
+  };
 
-        const items = Array.from(linkData);
-        console.log(items);
-        const [reorderedItem] = items.splice(result.source.index, 1);
-        items.splice(result.destination.index, 0, reorderedItem);
-        console.log(items);
-        updateLinkData(items);
-    }
+  const onChange = (e) => {
+    setLink({ ...link, [e.target.name]: e.target.value });
+  };
 
-    return (
-        <div>
-            <Addlink showAlert={props.showAlert} />
+  const handleOnDragEnd = (result) => {
+    // TODO: reorder our column
+    console.log(result);
+    console.log("linkdata", linkData);
+    // if (!result.destination) return;
 
-            {/* Button trigger modal  */}
-            <button type="button" ref={ref} className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Launch demo modal
-            </button>
+    const items = Array.from(linkData);
+    console.log(items);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    console.log(items);
+    updateLinkData(items);
+  };
 
-            {/* Modal  */}
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">Edit Link</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div className="modal-body">
-                            <form>
-                                <div className="mb-3">
-                                    <input type="text" className="form-control" id="edescription" name='edescription' value={link.edescription} aria-describedby="emailHelp" onChange={onChange} placeholder='Enter Description' />
-                                </div>
-                                <div className="mb-3">
-                                    <input type="text" className="form-control" id="elink" name='elink' value={link.elink} onChange={onChange} placeholder='Enter Link' />
-                                </div>
-                                <div className="mb-3">
-                                    <select className="form-select" id='elinkType' name='elinkType' value={link.elinkType} aria-label="Default select example" onChange={onChange} placeholder='Select'>
-                                        {/* <option value="Normal Link" selected disabled>Select Link Type</option> */}
-                                        <option value="Normal Link">Normal Link</option>
-                                        <option value="Normal Image Link">Normal Image Link</option>
-                                        <option value="Drive Image Link">Drive Image Link</option>
-                                        <option value="Drive Video">Drive Video</option>
-                                        <option value="Youtube Video">Youtube Video</option>
-                                    </select>
-                                </div>
-                            </form>
-                        </div>
-                        <div className="modal-footer">
-                            <button ref={refClose} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button
-                                disabled={link.edescription.length === 0 || link.elink.length === 0 || link.elinkType.length === 0}
-                                type="button" className="btn btn-primary" onClick={handleClick}>Update Link</button>
-                        </div>
-                    </div>
-                </div>
+//  console.log("link",link)
+  
+  return (
+    <div>
+      <Addlink showAlert={props.showAlert} />
+
+      {/* Button trigger modal  */}
+      <button
+        type="button"
+        ref={ref}
+        className="btn btn-primary d-none"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+      >
+        Launch demo modal
+      </button>
+
+      {/* Modal  */}
+      <div
+        className="modal fade"
+        id="exampleModal"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                Edit Link
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
-
-            <DragDropContext onDragEnd={handleOnDragEnd}>
-                <div className="d-flex justify-content-center">
-                    <h2>List of Links</h2>
+            <div className="modal-body">
+              <form>
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="edescription"
+                    name="edescription"
+                    value={link.edescription}
+                    aria-describedby="emailHelp"
+                    onChange={onChange}
+                    placeholder="Enter Description"
+                  />
                 </div>
-
-                <Droppable droppableId="links">
-                    {(provided) => (
-                        <div className='links'
-                            {...provided.droppableProps} ref={provided.innerRef}
-                        >
-                            {finalLinkData.map((link, index) => {
-                                // console.log(link)
-                                return (
-                                    <Draggable key={link._id} draggableId={link._id} index={index}>
-                                        {(provided) => (
-                                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                <Linkitem key={link._id} updateLink={updateLink} link={link} index={index} showAlert={props.showAlert} />
-                                                {provided.placeholder}
-                                            </div>
-                                        )}
-                                    </Draggable>
-                                )
-
-                            })}
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
-            </DragDropContext>
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="elink"
+                    name="elink"
+                    value={link.elink}
+                    onChange={onChange}
+                    placeholder="Enter Link"
+                  />
+                </div>
+                <div className="mb-3">
+                  <select
+                    className="form-select"
+                    id="elinkType"
+                    name="elinkType"
+                    value={link.elinkType}
+                    aria-label="Default select example"
+                    onChange={onChange}
+                    placeholder="Select"
+                  >
+                    {/* <option value="Normal Link" selected disabled>Select Link Type</option> */}
+                    <option value="Normal Link">Normal Link</option>
+                    <option value="Normal Image Link">Normal Image Link</option>
+                    <option value="Drive Image Link">Drive Image Link</option>
+                    <option value="Drive Video">Drive Video</option>
+                    <option value="Youtube Video">Youtube Video</option>
+                  </select>
+                </div>
+              </form>
+            </div>
+            <div className="modal-footer">
+              <button
+                ref={refClose}
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                disabled={
+                  link.edescription.length === 0 ||
+                  link.elink.length === 0 ||
+                  link.elinkType.length === 0
+                }
+                type="button"
+                className="btn btn-primary"
+                onClick={handleClick}
+              >
+                Update Link
+              </button>
+            </div>
+          </div>
         </div>
-    )
-}
+      </div>
 
-export default Links
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <div className="d-flex justify-content-center">
+          <h2>List of Links</h2>
+        </div>
+
+        <Droppable droppableId="links">
+          {(provided) => (
+            <div
+              className="links"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {finalLinkData.map((link, index) => {
+                // console.log(link)
+                return (
+                  <Draggable
+                    key={link._id}
+                    draggableId={link._id}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <Linkitem
+                          key={link._id}
+                          updateLink={updateLink}
+                          link={link}
+                          index={index}
+                          showAlert={props.showAlert}
+                        />
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Draggable>
+                );
+              })}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </div>
+  );
+};
+
+export default Links;
