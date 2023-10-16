@@ -27,7 +27,7 @@ const SettingsSchema = new Schema({
   }],
   rightFooter: [{
     rightFooterName: {type: String},
-    rightFooterURL: {type: String}
+    rightFooterURL: {type: String},
   }],
   socialLinks: [{
     linkType: {type: String},

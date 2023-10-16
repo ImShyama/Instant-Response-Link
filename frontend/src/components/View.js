@@ -76,7 +76,8 @@ const View = () => {
     search: isRowBased => ({
       // textAlign: "right",
       textAlign: isRowBased ? 'right' : 'center',
-      marginTop: isRowBased ? '' : '10px',
+      // marginTop: isRowBased ? '' : '10px',
+      marginTop: "-40px"
     })
   };
 
@@ -93,7 +94,7 @@ const View = () => {
   const firstIndex = lastIndex - recordsPerPage;
   var records = searchData.slice(firstIndex, lastIndex);
   const npage = Math.ceil(searchData.length / recordsPerPage)
-
+  console.log("npage", npage)
   function prevPage() {
     if (currentPage !== 1) {
       setCurrentPage(currentPage - 1)
@@ -139,7 +140,7 @@ const View = () => {
           <div><a type="button" class="btn btn-primary" href={viewsetting.leftFooter[0].leftFooterURL} target='_blank' >{viewsetting.leftFooter[0].leftFooterName}</a></div>
           : <div><a type="button" style={{ visibility: "hidden" }} class="btn btn-primary" >{viewsetting?.leftFooter[0].leftFooterName}</a></div>
         }
-        {npage > 0 && <div className='d-flex justify-content-evenly'>
+        {(npage > 1 && viewsetting) && <div className='d-flex justify-content-evenly'>
           <div className='mx-2' ><button type="button" style={{ borderRadius: '10px' }} class="btn btn-outline-primary" onClick={prevPage} >Previous</button></div>
           <div className='mx-2'><button type="button" style={{ borderRadius: '10px' }} class="btn btn-outline-primary" onClick={nextPage} >Next</button></div>
         </div>}
@@ -148,6 +149,14 @@ const View = () => {
           : <div><a type="button" style={{ visibility: "hidden" }} class="btn btn-primary" >{viewsetting?.rightFooter[0].rightFooterName}</a></div>
         }
       </div>
+
+      {viewsetting && 
+      <div className='d-flex justify-content-center' >
+        <div className='companyTag' >
+          <a href='https://ceoitbox.com/' target='_blank' style={{textDecoration:"none", color:"inherit"}}><h3 style={{padding:'4px', margin:'0px'}}>CEOITBOX</h3></a>
+        </div>
+      </div>
+      }
 
       {viewsetting?.socialLinks.length > 0 &&
         // <div style={{bottom:'20px', position:'fixed', width:'100%', margin:'auto'}}>

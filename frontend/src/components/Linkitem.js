@@ -58,8 +58,8 @@ const Linkitem = (props) => {
                                     <option value="Bouncing">Bouncing</option>
                                     <option value="Expansion">Expansion</option>
                                     <option value="Fade">Fade</option>
-                                    <option value="Move sideways">Move sideways</option>
-                                    <option value="Colour highlighter">Colour highlighter</option>
+                                    <option value="Movesideways">Move sideways</option>
+                                    <option value="Colourhighlighter">Colour highlighter</option>
                                 </select>
                             </label>
                             <label className='m-1 p-1'>

@@ -74,3 +74,258 @@ label {
 .link:hover {
   background-color: #fff;
 }
+
+
+/* Animating Class 1 */
+.animationBouncing {
+  animation: animation1 2s;
+  animation-iteration-count: infinite;
+}
+
+
+@keyframes animation1 {
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
+
+
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+
+
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+
+
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
+
+
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
+
+
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+
+
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+
+
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
+
+
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+
+
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+
+
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
+}
+
+
+/* End of Animating Class 1 */
+
+
+/* Animating Class 2 */
+.animationExpansion {
+  animation: animation2 2s;
+  animation-iteration-count: infinite;
+}
+
+
+@keyframes animation2 {
+  0% {
+    transform: scale(.8);
+  }
+
+
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+
+/* End of Animating Class 2 */
+
+
+/* Animating Class 3 */
+.animationFade {
+  animation: animation3 2s;
+  animation-iteration-count: infinite;
+}
+
+
+@keyframes animation3 {
+  0% {
+    opacity: 0.4;
+  }
+
+
+  40% {
+    opacity: 0.5;
+  }
+
+
+  50% {
+    opacity: 0.6;
+  }
+
+
+  60% {
+    opacity: 0.7;
+  }
+
+
+  70% {
+    opacity: 0.8;
+  }
+
+
+  80% {
+    opacity: 0.9;
+  }
+
+
+  90% {
+    opacity: 0.91;
+  }
+
+
+  100% {
+    opacity: 1;
+  }
+}
+
+
+/* End of Animating Class 3 */
+
+
+/* Animating Class 4 */
+.animationMovesideways {
+  animation: animation4 2s;
+  animation-iteration-count: infinite;
+}
+
+
+@keyframes animation4 {
+  0% {
+    transform: translateX(10px);
+  }
+
+
+  50% {
+    transform: translateX(30px);
+  }
+
+
+  100% {
+    transform: translateX(-30px);
+  }
+}
+
+
+/* End of Animating Class 4 */
+
+
+/* Animating Class 5 */
+.animationColourhighlighter {
+  animation: animation5 2s;
+  animation-iteration-count: infinite;
+}
+
+
+@keyframes animation5 {
+  0% {
+    background: red;
+    color: white;
+  }
+
+
+  10% {
+    background: blue;
+    color: white;
+  }
+
+
+  20% {
+    background: orange;
+    color: white;
+  }
+
+
+  30% {
+    background: green;
+    color: white;
+  }
+
+
+  40% {
+    background: pink;
+    color: white;
+  }
+
+
+  50% {
+    background: #fea;
+    color: white;
+  }
+
+
+  60% {
+    background: #ea0;
+    color: white;
+  }
+
+
+  70% {
+    background: #123;
+    color: white;
+  }
+
+
+  80% {
+    background: #ffa;
+    color: white;
+  }
+
+
+  90% {
+    background: #bbe;
+    color: white;
+  }
+
+
+  100% {
+    background: #def;
+    color: white;
+  }
+}
+
+
+/* End of Animating Class 5 */
+
+
+.companyTag {
+  color: "#bad900";
+  background: "#fff";
+  width: "140px";
+  text-align: "center";
+  border-radius: "100px"
+}

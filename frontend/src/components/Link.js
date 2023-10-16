@@ -131,8 +131,8 @@ const Link = (props) => {
 
     return (
         <>
-            <div style={mystyle.container(isRowBased)} >
-                <div className='d-flex justify-content-between p-2 link'  >
+            <div className='' style={mystyle.container(isRowBased)} >
+                <div className={'d-flex justify-content-between p-2 link animation'+link.animation }  >
                     <div style={{ width: "40px", height: "40px" }}>
                         {link.thumbnail && <img src={DriveUrl(link.thumbnail)} style={{ width: "40px", height: "40px", borderRadius: "100%" }} />}
                     </div>
