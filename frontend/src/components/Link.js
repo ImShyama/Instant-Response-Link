@@ -144,7 +144,11 @@ const Link = (props) => {
             {link.thumbnail && (
               <img
                 src={DriveUrl(link.thumbnail)}
-                style={{ width: "40px", height: "40px", borderRadius: "100%" }}
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "100%",
+                }}
               />
             )}
           </div>
@@ -173,7 +177,7 @@ const Link = (props) => {
                 </h6>
               </a>
             ) : (
-              <p
+              <h6
                 style={{
                   marginBottom: "0",
                   color: `${linksSettings?.color || ""}`,
@@ -182,7 +186,7 @@ const Link = (props) => {
                 }}
               >
                 {link.description}
-              </p>
+              </h6>
             )}
           </div>
           <div
@@ -193,14 +197,14 @@ const Link = (props) => {
               ""
             ) : (
               <button
-                onClick={() => {
-                  setShown(!shown);
-                  shown && clickInfo(link._id, link.link);
-                }}
                 style={{
                   border: "none",
                   backgroundColor: "transparent",
                   color: `${linksSettings?.color || ""}`,
+                }}
+                onClick={() => {
+                  setShown(!shown);
+                  shown && clickInfo(link._id, link.link);
                 }}
               >
                 {shown ? (

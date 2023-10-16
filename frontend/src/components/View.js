@@ -77,7 +77,7 @@ const View = () => {
     search: (isRowBased) => ({
       // textAlign: "right",
       textAlign: isRowBased ? "right" : "center",
-      marginTop: isRowBased ? "" : "10px",
+      marginTop: "-40px",
     }),
   };
 
@@ -200,6 +200,7 @@ const View = () => {
           <div className="d-flex justify-content-evenly">
             <div className="mx-2">
               <button
+                type="button"
                 style={{
                   color: `${paginationSetting.color}`,
                   fontFamily: `${paginationSetting.family}`,
@@ -207,7 +208,6 @@ const View = () => {
                   backgroundColor: `${paginationSetting.background}`,
                   borderRadius: "10px",
                 }}
-                type="button"
                 class="btn btn-outline-primary"
                 onClick={prevPage}
               >
@@ -216,6 +216,7 @@ const View = () => {
             </div>
             <div className="mx-2">
               <button
+                type="button"
                 style={{
                   color: `${paginationSetting.color}`,
                   fontFamily: `${paginationSetting.family}`,
@@ -223,7 +224,6 @@ const View = () => {
                   backgroundColor: `${paginationSetting.background}`,
                   borderRadius: "10px",
                 }}
-                type="button"
                 class="btn btn-outline-primary"
                 onClick={nextPage}
               >
@@ -236,12 +236,6 @@ const View = () => {
         viewsetting?.rightFooter[0].rightFooterName !== "" ? (
           <div>
             <a
-              style={{
-                color: `${viewsetting.rightFooterSetting.color}`,
-                fontFamily: `${viewsetting.rightFooterSetting.family}`,
-                fontSize: `${viewsetting.rightFooterSetting.size}`,
-                backgroundColor: `${viewsetting.rightFooterSetting.background}`,
-              }}
               type="button"
               class="btn btn-primary"
               href={viewsetting.leftFooter[0].leftFooterURL}
@@ -252,8 +246,14 @@ const View = () => {
         ) : (
           <div>
             <a
+              style={{
+                color: `${viewsetting?.rightFooterSetting?.color}`,
+                fontFamily: `${viewsetting?.rightFooterSetting?.family}`,
+                fontSize: `${viewsetting?.rightFooterSetting?.size}`,
+                backgroundColor: `${viewsetting?.rightFooterSetting?.background}`,
+                visibility: "hidden",
+              }}
               type="button"
-              style={{ visibility: "hidden" }}
               class="btn btn-primary"
             >
               {viewsetting?.rightFooter[0].rightFooterName}
@@ -261,6 +261,20 @@ const View = () => {
           </div>
         )}
       </div>
+
+      {viewsetting && (
+        <div className="d-flex justify-content-center">
+          <div className="companyTag">
+            <a
+              href="https://ceoitbox.com/"
+              target="_blank"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <h3 style={{ padding: "4px", margin: "0px" }}>CEOITBOX</h3>
+            </a>
+          </div>
+        </div>
+      )}
 
       {
         viewsetting?.socialLinks.length > 0 && (

@@ -38,28 +38,24 @@ const SettingsSchema = new Schema({
       leftFooterURL: { type: String },
     },
   ],
-
   leftFooterSetting: {
     size: { type: String, default: "16px" },
     color: { type: String, default: "#fff" },
     family: { type: String, default: "sans-serif" },
     background: { type: String, default: "blue" },
   },
-
   rightFooter: [
     {
       rightFooterName: { type: String },
       rightFooterURL: { type: String },
     },
   ],
-
   rightFooterSetting: {
     size: { type: String, default: "16px" },
     color: { type: String, default: "#fff" },
     family: { type: String, default: "sans-serif" },
     background: { type: String, default: "blue" },
   },
-
   paginationSetting: {
     size: { type: String, default: "16px" },
     color: { type: String, default: "#fff" },
